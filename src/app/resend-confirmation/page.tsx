@@ -1,0 +1,15 @@
+import Link from "next/link";
+import { ArrowLeft, Compass } from "lucide-react";
+import { ResendConfirmationForm } from "@/components/auth/resend-confirmation-form";
+
+export default function ResendConfirmationPage() {
+  return <main className="container grid min-h-screen max-w-6xl place-items-center py-12">
+    <section className="w-full max-w-md rounded-2xl border border-[var(--line)] bg-white p-8 sm:p-10">
+      <Link href="/login" className="mb-10 inline-flex items-center gap-2 text-xs font-semibold text-[var(--muted)]"><ArrowLeft size={14} /> Kembali ke halaman masuk</Link>
+      <div className="mb-7 grid size-10 place-items-center rounded-xl bg-[var(--brand)] text-white"><Compass size={19} /></div>
+      <p className="eyebrow mb-3">Konfirmasi email</p><h1 className="text-3xl font-bold tracking-[-.04em]">Kirim ulang tautan konfirmasi.</h1>
+      <p className="mt-3 text-sm leading-6 text-[var(--muted)]">Masukkan email yang kamu gunakan saat mendaftar. Kami akan mengirim tautan baru ke kotak masukmu.</p>
+      <ResendConfirmationForm setupRequired={!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY} />
+    </section>
+  </main>;
+}

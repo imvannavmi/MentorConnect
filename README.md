@@ -1,308 +1,74 @@
-# 🎓 MentorConnect
+# MentorConnect
 
-**Sistem Mentoring Modern** - Platform untuk menghubungkan mentee dengan mentor berpengalaman untuk mempercepat pembelajaran dan pengembangan karir.
+MentorConnect connects people who want to grow with experienced mentors. The repository is being rebuilt from its original React/Vite + Express/SQLite application into a Next.js and Supabase platform. The legacy `frontend/` and `backend/` folders are retained as a reference while the new application is built in `src/`.
 
-![MentorConnect](https://img.shields.io/badge/MentorConnect-v1.0-blue.svg)
-![React](https://img.shields.io/badge/React-18.x-61dafb.svg)
-![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)
-![SQLite](https://img.shields.io/badge/SQLite-3.x-blue.svg)
+## Current architecture
 
-## 📋 Daftar Isi
+- Next.js App Router, React, and TypeScript
+- Tailwind CSS 4 and reusable page components
+- Supabase Auth with cookie-based sessions through `@supabase/ssr`
+- PostgreSQL schema with row-level security, status-transition checks, review uniqueness, and booking-conflict constraints
+- Zod validation for auth, profiles, availability, reviews, and session requests
+- React Hook Form and Lucide icons
 
-- [Fitur Utama](#-fitur-utama)
-- [Teknologi yang Digunakan](#-teknologi-yang-digunakan)
-- [Prasyarat Instalasi](#-prasyarat-instalasi)
-- [Instalasi dan Setup](#-instalasi-dan-setup)
-- [Menjalankan Aplikasi](#-menjalankan-aplikasi)
-- [Struktur Proyek](#-struktur-proyek)
-- [API Endpoints](#-api-endpoints)
-- [Deployment](#-deployment)
-- [Kontribusi](#-kontribusi)
-- [Troubleshooting](#-troubleshooting)
+## Local development
 
-## ✨ Fitur Utama
+Requirements: Node.js 20.9 or newer and npm.
 
-### 🔐 **Sistem Autentikasi**
-- Registrasi mentee dan mentor
-- Login dengan validasi role
-- Logout dengan konfirmasi
-
-### 👨‍🎓 **Dashboard Mentee**
-- Pencarian mentor berdasarkan keahlian
-- Request sesi mentoring
-- Tracking history sesi
-- Notifikasi real-time
-- Manajemen profil
-
-### 👨‍🏫 **Dashboard Mentor**
-- Manajemen permintaan sesi
-- Approve/reject sesi dengan alasan
-- Reschedule sesi
-- Pemberian feedback
-- Statistik mentoring
-
-### 💬 **Sistem Notifikasi**
-- Notifikasi sesi disetujui/ditolak
-- Notifikasi reschedule
-- Sharing materi pembelajaran
-
-### 📱 **Responsive Design**
-- Mobile-friendly interface
-- Modern UI dengan Tailwind CSS
-- Smooth animations
-
-## 🛠 Teknologi yang Digunakan
-
-### **Frontend**
-- **React.js 18** - Library UI
-- **React Router** - Routing
-- **Tailwind CSS** - Styling
-- **FontAwesome** - Icons
-- **Vite** - Build tool
-
-### **Backend**
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **SQLite** - Database
-- **bcrypt** - Password hashing
-- **CORS** - Cross-origin requests
-
-### **Tools & Others**
-- **VS Code** - Code editor
-- **Git** - Version control
-- **npm** - Package manager
-
-## 📋 Prasyarat Instalasi
-
-Pastikan sistem Anda memiliki:
-
-- **Node.js** (versi 16.x atau lebih baru)
-- **npm** (biasanya sudah include dengan Node.js)
-- **Git** (untuk clone repository)
-
-### Cek versi yang terinstall:
 ```bash
-node --version
-npm --version
-git --version
-```
-
-## 🚀 Instalasi dan Setup
-
-### 1. **Clone Repository**
-```bash
-git clone https://github.com/vxnzrxr/MentorConnect.git
-cd MentorConnect
-```
-
-### 2. **Setup Backend**
-```bash
-# Masuk ke folder backend
-cd backend
-
-# Install dependencies
 npm install
-
-# Setup database dan data sample
-npm run setup
-```
-
-### 3. **Setup Frontend**
-```bash
-# Masuk ke folder frontend (dari root project)
-cd ../frontend
-
-# Install dependencies
-npm install
-```
-
-## ▶️ Menjalankan Aplikasi
-
-### **Mode Development (Recommended)**
-
-Buka 2 terminal terpisah:
-
-#### **Terminal 1 - Backend:**
-```bash
-cd backend
-node app.js
-```
-Server akan berjalan di: `http://localhost:5175`
-
-#### **Terminal 2 - Frontend:**
-```bash
-cd frontend
+cp .env.example .env.local
 npm run dev
 ```
-Aplikasi akan berjalan di: `http://localhost:5173`
 
-### **Akses Aplikasi**
-Buka browser dan kunjungi: `http://localhost:5173`
+The development server runs on `http://localhost:3001` so Supabase confirmation links use the same port. Add your Supabase project URL and publishable key to `.env.local` to enable authentication and database-backed screens:
 
-### **🔑 Akun Testing (Sudah Tersedia)**
-Setelah setup database, Anda dapat langsung login dengan akun berikut:
-
-**Mentee:**
-- Email: `mentee@example.com` 
-- Password: `password123`
-
-**Mentor:**  
-- Email: `mentor@example.com`
-- Password: `password123`
-
-**Demo Accounts:**
-- Demo Mentee: `demo.mentee@example.com` / `demo123`
-- Demo Mentor: `demo.mentor@example.com` / `demo123`
-
-### **Untuk Akses dari HP/Device Lain:**
-
-1. **Setup Port Forwarding di VS Code:**
-   - Buka panel `PORTS` di VS Code
-   - Forward port `5173` (frontend) dengan visibility `Public`
-   - Forward port `5175` (backend) dengan visibility `Public`
-
-2. **Akses via tunnel URL:**
-   - Frontend: `https://xxx-5173.devtunnels.ms`
-   - Backend: `https://xxx-5175.devtunnels.ms`
-
-## 📁 Struktur Proyek
-
-```
-MentorConnect/
-├── 📁 backend/                 # Server aplikasi
-│   ├── 📄 app.js              # Main server file
-│   ├── 📄 db.js               # Database connection
-│   ├── 📄 db-init.sql         # Database schema
-│   ├── 📄 database.sqlite     # SQLite database
-│   ├── 📄 package.json        # Backend dependencies
-│   └── 📄 test_api_endpoints.js # API testing
-│
-├── 📁 frontend/               # Client aplikasi
-│   ├── 📁 src/               # Source code
-│   │   ├── 📄 App.jsx        # Main component & landing page
-│   │   ├── 📄 Login.jsx      # Login page
-│   │   ├── 📄 Register.jsx   # Registration page
-│   │   ├── 📄 MenteeDashboard.jsx  # Dashboard mentee
-│   │   ├── 📄 MentorDashboard.jsx  # Dashboard mentor
-│   │   ├── 📄 MenteeProfile.jsx    # Profile mentee
-│   │   ├── 📄 MentorProfile.jsx    # Profile mentor
-│   │   ├── 📄 MentorSearchPage.jsx # Pencarian mentor
-│   │   ├── 📄 SessionRequests.jsx  # Manajemen sesi
-│   │   ├── 📄 NotificationPage.jsx # Halaman notifikasi
-│   │   ├── 📄 SessionHistory.jsx   # History sesi
-│   │   ├── 📄 FeedbackModal.jsx    # Modal feedback
-│   │   ├── 📄 LogoutModal.jsx      # Modal logout
-│   │   └── 📄 main.jsx       # Entry point
-│   ├── 📄 index.html         # HTML template
-│   ├── 📄 package.json       # Frontend dependencies
-│   ├── 📄 tailwind.config.js # Tailwind configuration
-│   └── 📄 vite.config.js     # Vite configuration
-│
-├── 📄 README.md              # Dokumentasi ini
-├── 📄 .gitignore            # Git ignore rules
-└── 📄 .vscode/              # VS Code settings
+```dotenv
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3001
 ```
 
-## 🔌 API Endpoints
+The publishable key is designed for client use; row-level security protects database rows. Never put a Supabase service-role key in a `NEXT_PUBLIC_` variable or browser code.
 
-### **Authentication**
-- `POST /api/register` - Registrasi user baru
-- `POST /api/login` - Login user
+## Database setup
 
-### **Profile Management**
-- `GET /api/profile` - Get user profile
-- `PUT /api/profile` - Update user profile
+The proposed initial schema is in `supabase/migrations/0001_initial_schema.sql`. It creates the auth-linked profiles, mentor and mentee profiles, normalized skills and categories, availability, mentoring sessions, notifications, and reviews. It enables row-level security and adds database rules for session ownership, lifecycle transitions, duplicate reviews, and overlapping bookings.
 
-### **Dashboard**
-- `GET /api/mentee-dashboard` - Data dashboard mentee
-- `GET /api/mentor-dashboard` - Data dashboard mentor
+The schema has **not** been applied to a Supabase project. Review it, create a new Supabase project, then apply the migration using your approved workflow. Optional starting categories and skills are in `supabase/seed.sql`; it creates no sample users or passwords.
 
-### **Mentor Features**
-- `GET /api/mentors` - List semua mentor
-- `GET /api/mentor-profile/:id` - Detail profil mentor
-- `GET /api/mentor/:id/session-requests` - Permintaan sesi untuk mentor
+For admin onboarding, `public.grant_admin_role(uuid)` is restricted to trusted database operators/service-role access. Do not expose a service-role key to the browser.
 
-### **Session Management**
-- `POST /api/session-requests` - Buat permintaan sesi baru
-- `PUT /api/session-requests/:id/approve` - Approve sesi
-- `PUT /api/session-requests/:id/reject` - Reject sesi
-- `GET /api/sessions/history` - History sesi
+## Authentication and redirects
 
-### **Notifications**
-- `GET /api/mentee/:id/notifications` - Notifikasi mentee
-- `PUT /api/notifications/:id/read` - Mark notifikasi as read
-- `DELETE /api/notifications/:id` - Hapus notifikasi
+Configure Supabase Auth’s site URL as `http://localhost:3001`. Add the local callback URL (`http://localhost:3001/auth/callback`) and the production callback URL to the allowed redirect URLs. Email confirmation and password-reset messages are sent by Supabase Auth.
 
-## 🌐 Deployment
+Registration permits only `mentee` and `mentor`. Admin assignment is a trusted operator action. Dashboard routes check the signed-in user and application role on the server; RLS and database constraints enforce ownership independently of the UI.
 
-### **Local Production Build**
+## Main routes
+
+- `/` — public landing page
+- `/mentors` — database-backed mentor search and filters
+- `/mentors/[mentorId]` — mentor details, availability, reviews, and session request
+- `/login`, `/register`, `/forgot-password`, `/reset-password` — account access
+- `/resend-confirmation` — resend a signup confirmation email using the configured local callback URL
+- `/dashboard/mentee` — mentee sessions, learning time, and notifications
+- `/dashboard/mentor` — requests, upcoming sessions, reviews, and notifications
+- `/dashboard/mentor/profile` and `/dashboard/mentee/profile` — profile management
+- `/dashboard/mentor/availability` — recurring weekly availability
+
+The core session flow is request → mentor approval, rejection, or proposed time → mentee confirmation → completion → verified review. Notifications are created by database triggers and refreshed on the dashboard.
+
+## Quality checks
+
 ```bash
-# Build frontend
-cd frontend
+npm run lint
 npm run build
-
-# Serve dengan static server
-npx serve -s dist -p 3000
+npm audit --omit=dev
 ```
 
-### **Cloud Deployment Options**
-- **Frontend**: Vercel, Netlify, GitHub Pages
-- **Backend**: Railway, Render, Heroku
-- **Database**: PostgreSQL, MySQL (untuk production)
+The build script uses webpack because Turbopack worker subprocesses failed in the Windows sandbox used during development. A complete live-flow and RLS test still requires a configured Supabase project; the repository does not include real demo credentials.
 
-## 🐛 Troubleshooting
+## Legacy implementation
 
-### **Problem: Database error saat setup**
-**Solution**: 
-```bash
-cd backend
-npm run reset-db  # Reset dan setup ulang database
-```
-
-### **Problem: "Module not found" error**
-**Solution**: 
-```bash
-# Install ulang dependencies
-cd backend && npm install
-cd ../frontend && npm install
-```
-
-### **Problem: Backend tidak bisa diakses dari HP**
-**Solution**: Pastikan port forwarding sudah disetup dengan visibility `Public`
-
-### **Problem: CORS Error**
-**Solution**: Cek konfigurasi CORS di `backend/app.js`
-
-### **Problem: Dashboard stuck "Memuat..."**
-**Solution**: 
-1. Cek apakah backend berjalan di port 5175
-2. Test API dengan: `curl http://localhost:5175/api/mentors`
-3. Cek console browser untuk error
-
-### **Problem: Port sudah digunakan**
-```bash
-# Kill process di port 5175 (backend)
-lsof -ti:5175 | xargs kill
-
-# Kill process di port 5173 (frontend)  
-lsof -ti:5173 | xargs kill
-```
-
-### **Problem: Login gagal**
-**Solution**: Pastikan menggunakan email dan password yang benar dari akun testing
-
-## 👥 Tim Pengembang
-
-- **Developer**: [vxnzrxr](https://github.com/vxnzrxr)
-- **Email**: vxnzrxr@gmail.com
-
-## 🙏 Ucapan Terima Kasih
-
-- React.js Community
-- Tailwind CSS Team
-- Node.js Contributors
-- SQLite Team
-
----
-
-**Happy Mentoring! 🎓✨**
+The original application source remains in `frontend/` and `backend/` for business-logic reference. Its README, SQLite schema, and endpoint code described features that were not all enforced consistently. The rebuild does not run the old database setup or reset scripts and does not modify any existing SQLite database.
